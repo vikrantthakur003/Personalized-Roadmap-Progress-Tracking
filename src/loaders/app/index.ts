@@ -20,19 +20,9 @@ const appLoader = async (app: Express, router: any) => new Promise<any>(resolve 
   app.use(express.urlencoded({
     extended: true
   }));
-  app.use(morgan((tokens, req, res) => {
-    return JSON.stringify({
-      time: new Date().toISOString(),
-      statusCode: res.statusCode,
-      responseTime: tokens['response-time'](req, res, 'iso'),
-      method: req.method,
-      path: req.url,
-      corId: tokens.corId(req, res),
-      corIdNew: tokens.corIdNew(req, res)
-    });
-  }));
+  app.use(morgan('dev'));
 
-  app.use('/auth', router);
+  app.use('/', router);
 
   app.use(async (req, res) => {
     await makeResponse(res, 404, false, 'the resource you are looking for is not found', undefined);
